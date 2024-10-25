@@ -116,12 +116,29 @@ const DragonPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quickPrice, totalSupplyQuick]);
 
+  const [dragonEggAnimation, setDragonEggAnimation] = useState(false);
+
+  const changeDragonEggAnimation = () => {
+    setDragonEggAnimation(!dragonEggAnimation);
+    if (!dragonEggAnimation) {
+      setTimeout(() => {
+        setDragonEggAnimation(false);
+      }, 3000);
+    }
+  };
+
   return showLair ? (
     <Box width='100%' mb={3}>
       <Box margin='0 auto 24px'>
         <HypeLabAds />
       </Box>
-      <Grid container className={`dragonHeader ${isMobile ? 'mobile' : ''}`}>
+      <Grid
+        container
+        className={`dragonHeader ${isMobile ? 'mobile' : ''} ${
+          dragonEggAnimation ? 'dragonEggHatched' : ''
+        }`}
+        onClick={changeDragonEggAnimation}
+      >
         <Grid item xs={12}>
           <Box className='dragonWrapper-title'>
             <h5>{t('dragonLair')}</h5>

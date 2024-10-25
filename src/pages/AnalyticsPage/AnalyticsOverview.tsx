@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -45,6 +45,17 @@ const AnalyticsOverview: React.FC = () => {
 
   const isLiquidityHub = version === 'liquidityhub';
 
+  const [dragonEggAnimation, setDragonEggAnimation] = useState(false);
+
+  const changeDragonEggAnimation = () => {
+    setDragonEggAnimation(!dragonEggAnimation);
+    if (!dragonEggAnimation) {
+      setTimeout(() => {
+        setDragonEggAnimation(false);
+      }, 3000);
+    }
+  };
+
   return isLiquidityHub ? (
     <Box width='100%' mb={3}>
       <LiquidityHubAnalytics />
@@ -67,9 +78,14 @@ const AnalyticsOverview: React.FC = () => {
         </Grid>
       </Grid>
       <Box mt={4}>
-        <Box className='flex flex-wrap panel'>
+        <Box
+          className={`flex flex-wrap panel dragonHeader ${
+            dragonEggAnimation ? 'dragonEggHatched' : ''
+          }`}
+          onClick={changeDragonEggAnimation}
+        >
           {globalDataLoading ? (
-            <Skeleton width='100%' height={20} />
+            <Skeleton width='80%' height={20} />
           ) : globalData ? (
             <AnalyticsInfo data={globalData} />
           ) : (
