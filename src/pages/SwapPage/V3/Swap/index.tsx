@@ -68,7 +68,6 @@ import { useTranslation } from 'react-i18next';
 import { useTransactionFinalizer } from 'state/transactions/hooks';
 import { getConfig } from 'config/index';
 import { useUSDCPriceFromAddress } from 'utils/useUSDCPrice';
-import { useV3TradeTypeAnalyticsCallback } from 'components/Swap/LiquidityHub';
 import useNativeConvertCallback, {
   ConvertType,
 } from 'hooks/useNativeConvertCallback';
@@ -356,17 +355,11 @@ const SwapV3Page: React.FC = () => {
   const { price: fromTokenUSDPrice } = useUSDCPriceFromAddress(
     currencies[Field.INPUT]?.wrapped.address ?? '',
   );
-  const onV3TradeAnalytics = useV3TradeTypeAnalyticsCallback(
-    currencies,
-    allowedSlippage,
-  );
-
   const isUni = trade?.swaps[0]?.route?.pools[0]?.isUni;
 
   const { walletInfo } = useWalletInfo();
 
   const handleSwap = useCallback(() => {
-    onV3TradeAnalytics(formattedAmounts);
     if (!swapCallback) {
       return;
     }
@@ -460,7 +453,6 @@ const SwapV3Page: React.FC = () => {
         });
       });
   }, [
-    onV3TradeAnalytics,
     formattedAmounts,
     swapCallback,
     tradeToConfirm,
@@ -691,7 +683,7 @@ const SwapV3Page: React.FC = () => {
         onDismiss={handleDismissTokenWarning}
       />
       <Box className='swap'>
-        <SwapHeader allowedSlippage={allowedSlippage} dynamicFee={dynamicFee} />
+        {/* <SwapHeader allowedSlippage={allowedSlippage} dynamicFee={dynamicFee} /> */}
 
         <ConfirmSwapModal
           isOpen={showConfirm}
@@ -802,35 +794,6 @@ const SwapV3Page: React.FC = () => {
             )}
           </Box>
         ) : null}
-
-        {!showWrap && !showNativeConvert && trade && (
-          <div className='flex items-center'>
-            <TradePrice
-              price={trade.executionPrice}
-              showInverted={showInverted}
-              setShowInverted={setShowInverted}
-            />
-            <CustomTooltip
-              onOpen={() => {
-                ReactGA.event({
-                  category: 'Swap',
-                  action: 'Transaction Details Tooltip Open',
-                });
-              }}
-              title={
-                <AdvancedSwapDetails
-                  trade={trade}
-                  allowedSlippage={allowedSlippage}
-                />
-              }
-            >
-              <Box padding='0.25rem' className='flex'>
-                <Info size={'1rem'} stroke='white' />
-              </Box>
-            </CustomTooltip>
-          </div>
-        )}
-
         <Box className='swapButtonWrapper'>
           {!account ? (
             <Button fullWidth onClick={() => open()}>
@@ -1012,6 +975,33 @@ const SwapV3Page: React.FC = () => {
             </Button>
           )}
         </Box>
+        {!showWrap && !showNativeConvert && trade && (
+          <div className='flex items-center'>
+            <TradePrice
+              price={trade.executionPrice}
+              showInverted={showInverted}
+              setShowInverted={setShowInverted}
+            />
+            <CustomTooltip
+              onOpen={() => {
+                ReactGA.event({
+                  category: 'Swap',
+                  action: 'Transaction Details Tooltip Open',
+                });
+              }}
+              title={
+                <AdvancedSwapDetails
+                  trade={trade}
+                  allowedSlippage={allowedSlippage}
+                />
+              }
+            >
+              <Box padding='0.25rem' className='flex'>
+                <Info size={'1rem'} stroke='white' />
+              </Box>
+            </CustomTooltip>
+          </div>
+        )}
         {isExpertMode && swapErrorMessage ? (
           <Box mt={2}>
             <SwapCallbackError error={swapErrorMessage} />

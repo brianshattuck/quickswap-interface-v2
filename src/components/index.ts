@@ -37,6 +37,7 @@ export { default as UnstakeQuickModal } from './UnstakeQuickModal';
 export { default as MinimalPositionCard } from './PositionCard';
 export { default as SyrupCard } from './SyrupCard';
 export { default as FarmCard } from './FarmCard';
+export { default as Eggs } from './Eggs';
 export { default as Swap, AdvancedSwapDetails } from './Swap';
 export { default as AddLiquidity } from './AddLiquidity';
 export { default as MeldModal } from './MeldModal';
@@ -62,4 +63,7 @@ export { default as NetworkSelectionDropdown } from './NetworkSelectionDropdown'
 export { default as SortColumns } from './SortColumns';
 export { default as TermsWrapper } from './TermsWrapper';
 export { default as LiquidityHubAnalytics } from './LiquidityHubAnalytics';
+export { default as ChainSelector } from './ChainSelector';
+export { default as Note } from './Note';
 export { default as TokenSelectorPanelForBonds } from './TokenSelectorPanelForBonds';
+export * from './Bridge';

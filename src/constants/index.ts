@@ -56,6 +56,7 @@ import {
   ABOND,
   DSRUN,
   VDA,
+  TRKX,
 } from './v3/addresses';
 import { FeeAmount } from 'v3lib/utils';
 import { BondToken } from 'types/bond';
@@ -64,6 +65,8 @@ export const bondAPIV2BaseURL = 'https://api-v2.apeswap.finance';
 export const CEX_BILL_ADDRESS = '0x6D7637683eaD28F775F56506602191fdE417fF60';
 
 export const AVERAGE_L1_BLOCK_TIME = 12000;
+
+export const DRAGON_EGGS_SHOW = false;
 
 export const merklAMMs: { [chainId in ChainId]?: string[] } = {
   [ChainId.MATIC]: ['quickswapalgebra'],
@@ -116,6 +119,7 @@ export const CHAIN_IDS_TO_NAMES = {
   [ChainId.IMX]: 'IMX',
   [ChainId.ASTARZKEVM]: 'astar_zkevm',
   [ChainId.LAYERX]: 'layerX',
+  [ChainId.ETHEREUM]: 'ethereum',
 };
 
 export enum ZapType {
@@ -189,6 +193,7 @@ export const BONUS_CUTOFF_AMOUNT: { [chainId in ChainId]?: number } = {
 export const MIN_NATIVE_CURRENCY_FOR_GAS: {
   [chainId in ChainId]: JSBI;
 } = {
+  [ChainId.ETHEREUM]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)), // .01 ETH
   [ChainId.MATIC]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)), // .01 ETH
   [ChainId.MUMBAI]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)),
   [ChainId.DOEGCHAIN_TESTNET]: JSBI.exponentiate(
@@ -213,6 +218,7 @@ export const MIN_NATIVE_CURRENCY_FOR_GAS: {
   [ChainId.IMX]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(14)),
   [ChainId.ASTARZKEVM]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(14)),
   [ChainId.LAYERX]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(15)),
+  [ChainId.MINATO]: JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(14)),
 };
 
 export const GlobalConst = {
@@ -306,6 +312,13 @@ export const GlobalConst = {
     ALL_CHART: 5,
     CHART_COUNT: 60, //limit analytics chart items not more than 60
   },
+  quickBurnChart: {
+    ONE_DAY_CHART: 1,
+    ONE_WEEK_CHART: 2,
+    ONE_MONTH_CHART: 3,
+    ALL_CHART: 4,
+    CHART_COUNT: 60, //limit chart items not more than 60
+  },
   v2FarmTab: {
     LPFARM: 'lpFarm',
     DUALFARM: 'DualFarm',
@@ -355,16 +368,18 @@ export const SUPPORTED_CHAINIDS = [
   ChainId.MATIC,
   ChainId.ZKEVM,
   ChainId.MANTA,
+  ChainId.LAYERX,
+  ChainId.DOGECHAIN,
+  ChainId.ETHEREUM,
   ChainId.IMX,
   ChainId.ASTARZKEVM,
-  ChainId.DOGECHAIN,
-  ChainId.LAYERX,
   ChainId.ZKATANA,
-  ChainId.X1,
   ChainId.TIMX,
   ChainId.ZKTESTNET,
   ChainId.MUMBAI,
+  ChainId.X1,
   ChainId.DOEGCHAIN_TESTNET,
+  ChainId.MINATO,
 ];
 
 export interface GammaPair {
@@ -2334,10 +2349,16 @@ export const IchiVaults: {
     '0xECD259DEdDc93B9881debDC67c7c4b553794Fd3c',
     '0x20268C918a6873aBB44d7f53A4Eb92a968Bb255b',
     '0xe3a2F6b642cBB29F7D5A82afa83a48b9c4E79244',
+    '0xD7c329ce757b24a43E9767980CE568fDA14C7e95',
+    '0xF497556DC0e3E251CdFA6eA87772A54B8e0bc5a8',
+    '0xC47dC89a5bAa26E0E3f58b64caEc095d80cD4c2D',
   ],
   [ChainId.ZKEVM]: [
     '0x423382e084f1d1d180bec638bc64cc6408896c3c',
     '0xb4eac29e630e38133e015ad17e3986886d5e8b35',
+    '0xc0892aD9148b6A6520698BA0079E92242435bF7b',
+    '0x24091dAe5CEBbb3ebb52A786716015B83FBe3fe5',
+    '0x4A14Af94ee033E1B51430f314C9B049672Ae9203',
   ],
 };
 
@@ -2482,6 +2503,12 @@ export const DefiedgeStrategies: {
       token1: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
       pool: '0x7B925e617aefd7FB3a93Abe3a701135D7a1Ba710',
     },
+    {
+      id: '0xe95dc9e01bb0c24dbf4cbd2ecbfd4196fc4b7f2b',
+      pool: '0x8811519bFd7F0AF766caFc013677099D49FE6622',
+      token0: '0x5F2F8818002dc64753daeDF4A6CB2CcB757CD220',
+      token1: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    },
   ],
 };
 
@@ -2556,16 +2583,15 @@ export const GlobalValue = {
         ABOND[ChainId.MATIC],
         DSRUN[ChainId.MATIC],
         VDA[ChainId.MATIC],
+        TRKX[ChainId.MATIC],
       ],
       [ChainId.DOGECHAIN]: [
         EMPTY[ChainId.DOGECHAIN],
         USDC[ChainId.DOGECHAIN],
         USDT[ChainId.DOGECHAIN],
-        WBTC[ChainId.DOGECHAIN],
         DAI[ChainId.DOGECHAIN],
         ETHER[ChainId.DOGECHAIN],
         MATIC[ChainId.DOGECHAIN],
-        MI[ChainId.DOGECHAIN],
         DC[ChainId.DOGECHAIN],
         DD[ChainId.DOGECHAIN],
         dDD[ChainId.DOGECHAIN],
@@ -2593,6 +2619,7 @@ export const GlobalValue = {
       [ChainId.IMX]: [],
       [ChainId.ASTARZKEVM]: [],
       [ChainId.LAYERX]: [],
+      [ChainId.ETHEREUM]: [],
     },
   },
   marketSDK: {
@@ -2652,7 +2679,6 @@ export const GlobalData = {
       USDC[ChainId.DOGECHAIN],
       USDT[ChainId.DOGECHAIN],
       DAI[ChainId.ZKEVM],
-      MI[ChainId.DOGECHAIN],
     ],
     [ChainId.DOEGCHAIN_TESTNET]: [],
     [ChainId.ZKEVM]: [
@@ -2675,7 +2701,7 @@ export const GlobalData = {
     [ChainId.TIMX]: [USDC[ChainId.TIMX]],
     [ChainId.BTTC]: [],
     [ChainId.X1]: [USDC[ChainId.X1]],
-    [ChainId.IMX]: [USDC[ChainId.IMX], USDT[ChainId.IMX]],
+    [ChainId.IMX]: [USDC[ChainId.IMX], USDT[ChainId.IMX], axlUSDC[ChainId.IMX]],
     [ChainId.ASTARZKEVM]: [
       USDC[ChainId.ASTARZKEVM],
       USDT[ChainId.ASTARZKEVM],
@@ -2686,6 +2712,7 @@ export const GlobalData = {
       USDT[ChainId.LAYERX],
       DAI[ChainId.LAYERX],
     ],
+    [ChainId.ETHEREUM]: [],
   },
   blueChips: {
     [ChainId.MATIC]: [
@@ -2751,6 +2778,13 @@ export const GlobalData = {
       DAI[ChainId.LAYERX],
       WBTC[ChainId.LAYERX],
     ],
+    [ChainId.ETHEREUM]: [
+      WETH[ChainId.ETHEREUM],
+      USDC[ChainId.ETHEREUM],
+      USDT[ChainId.ETHEREUM],
+      DAI[ChainId.ETHEREUM],
+      WBTC[ChainId.ETHEREUM],
+    ],
   },
   stablePairs: {
     [ChainId.MATIC]: [
@@ -2786,6 +2820,16 @@ export const GlobalData = {
       [WETH[ChainId.ASTARZKEVM], WSTETH[ChainId.ASTARZKEVM]],
     ],
     [ChainId.LAYERX]: [],
+    [ChainId.ETHEREUM]: [],
+  },
+  quickBurns: {
+    CHART_DURATIONS: [
+      GlobalConst.quickBurnChart.ONE_DAY_CHART,
+      GlobalConst.quickBurnChart.ONE_WEEK_CHART,
+      GlobalConst.quickBurnChart.ONE_MONTH_CHART,
+      GlobalConst.quickBurnChart.ALL_CHART,
+    ],
+    CHART_DURATION_TEXTS: ['1D', '1W', '1M', 'All'],
   },
 };
 
@@ -2858,6 +2902,7 @@ export const ContestPairs: any = {
   [ChainId.DOGECHAIN]: [],
   [ChainId.ZKTESTNET]: [],
   [ChainId.MUMBAI]: [],
+  [ChainId.ETHEREUM]: [],
 };
 
 export const LeaderBoardAnalytics = {
@@ -2888,7 +2933,7 @@ export const BOND_QUERY_KEYS = {
 export const zapInputTokens: Partial<Record<ChainId, BondToken[]>> = {
   [ChainId.MATIC]: [
     {
-      symbol: 'wMATIC',
+      symbol: 'WPOL',
       address: {
         [ChainId.MATIC]: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
       },

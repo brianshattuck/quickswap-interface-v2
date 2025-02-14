@@ -21,6 +21,8 @@ export const rpcMap = {
   [ChainId.IMX]: 'https://rpc.immutable.com',
   [ChainId.ASTARZKEVM]: 'https://rpc.startale.com/astar-zkevm',
   [ChainId.LAYERX]: 'https://rpc.xlayer.tech',
+  [ChainId.ETHEREUM]: 'https://eth.llamarpc.com',
+  [ChainId.MINATO]: 'https://rpc.minato.soneium.org',
 };
 
 class AppJsonRpcProvider extends StaticJsonRpcProvider {
@@ -71,6 +73,7 @@ class AppJsonRpcProvider extends StaticJsonRpcProvider {
 export const RPC_PROVIDERS: {
   [key in ChainId]: StaticJsonRpcProvider;
 } = {
+  [ChainId.ETHEREUM]: new AppJsonRpcProvider(ChainId.ETHEREUM),
   [ChainId.MATIC]: new AppJsonRpcProvider(ChainId.MATIC),
   [ChainId.MUMBAI]: new AppJsonRpcProvider(ChainId.MUMBAI),
   [ChainId.DOGECHAIN]: new AppJsonRpcProvider(ChainId.DOGECHAIN),
@@ -88,4 +91,5 @@ export const RPC_PROVIDERS: {
   [ChainId.IMX]: new AppJsonRpcProvider(ChainId.IMX),
   [ChainId.ASTARZKEVM]: new AppJsonRpcProvider(ChainId.ASTARZKEVM),
   [ChainId.LAYERX]: new AppJsonRpcProvider(ChainId.LAYERX),
+  [ChainId.MINATO]: new AppJsonRpcProvider(ChainId.MINATO),
 };

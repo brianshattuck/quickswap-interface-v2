@@ -14,7 +14,9 @@ import CustomTabSwitch from 'components/v3/CustomTabSwitch';
 import ActiveDotImage from 'assets/images/chainActiveDot.png';
 import { useSwitchNetwork } from '@web3modal/ethers5/react';
 
-const NetworkSelectionDropdown: React.FC = () => {
+const NetworkSelectionDropdown: React.FC<{
+  setOpenNetworkSelection: (isOpen: boolean) => void;
+}> = ({ setOpenNetworkSelection }) => {
   const { t } = useTranslation();
   const arcxSdk = useArcxAnalytics();
   const { chainId, account, currentChainId } = useActiveWeb3React();
@@ -57,12 +59,18 @@ const NetworkSelectionDropdown: React.FC = () => {
       if (!currentChainId) {
         window.location.reload();
       }
+      setOpenNetworkSelection(false);
     },
     [account, arcxSdk, currentChainId, switchNetwork],
   );
 
   return (
-    <Box className='networkSelectionDropdown'>
+    <Box
+      className='networkSelectionDropdown'
+      sx={{
+        bgcolor: '#1b1e29',
+      }}
+    >
       <p>{t('selectNetwork')}</p>
       <Box className='networkTypeWrapper'>
         <CustomTabSwitch

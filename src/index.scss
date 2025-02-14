@@ -1,8 +1,8 @@
-@use 'styles/variables' as *;
-@use 'styles/fonts' as *;
-@use 'styles/colors' as *;
-@use 'styles/breakpoints' as *;
-@use 'styles/mui-overrides' as *;
+@use "styles/variables" as *;
+@use "styles/fonts" as *;
+@use "styles/colors" as *;
+@use "styles/breakpoints" as *;
+@use "styles/mui-overrides" as *;
 
 :root {
   --orderly-color-primary: 182 79 255;
@@ -130,7 +130,7 @@ wcm-modal {
 
 .wrapper {
   padding: 24px;
-  background: $bgPalette;
+  // background: $bgPalette;
   border-radius: 20px;
   @include media('screen', '<phone') {
     padding: 16px 12px;
@@ -200,20 +200,20 @@ wcm-modal {
 }
 
 .page {
-  background-color: $bgColor;
+  background-color: #141827;
   width: 100%;
   min-height: 100vh;
 }
 
 .pageWrapper {
-  max-width: 1312px;
+  max-width: 1344px;
   position: relative;
   z-index: 11;
   display: flex;
   align-items: center;
   flex-direction: column;
   margin: 0 auto;
-  padding: 152px 32px 0;
+  padding: 152px 0;
   @include media('screen', '<tablet') {
     padding: 190px 12px 0;
   }
@@ -265,10 +265,17 @@ wcm-modal {
   left: 0;
   z-index: 1;
   width: 100%;
+  min-height: 100%;
   overflow: hidden;
+  &.isNewBg {
+    min-height: 100%;
+  }
   & img {
     width: 100%;
     min-width: 1200px;
+    @media screen and (max-width: '600px') {
+      min-width: 600px;
+    }
   }
 }
 

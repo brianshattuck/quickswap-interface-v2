@@ -1,5 +1,11 @@
 import React, { lazy, useEffect } from 'react';
-import { Box, Grid } from '@material-ui/core';
+import {
+  Box,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 import { ReactComponent as HelpIcon } from 'assets/images/HelpIcon1.svg';
 import SupplyLiquidity from './SupplyLiquidity';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +30,9 @@ const PoolsPage: React.FC = () => {
   const { isV2, updateIsV2 } = useIsV2();
   const { isLpLock } = useIsLpLock();
   const { chainId } = useActiveWeb3React();
+  const { breakpoints } = useTheme();
+  const isMobile = useMediaQuery(breakpoints.down('xs'));
+
   const chainIdToUse = chainId ?? ChainId.MATIC;
   const config = getConfig(chainIdToUse);
   const v3 = config['v3'];
@@ -41,33 +50,67 @@ const PoolsPage: React.FC = () => {
     }
   }, [updateIsV2, v2]);
 
+  const showPools = config['pools']['available'];
+
+  if (!showPools) {
+    location.href = '/';
+  }
+
+  useEffect(() => {
+    if (!showPools) {
+      location.href = '/';
+    }
+  }, [showPools]);
+
   return (
     <Box width='100%' mb={3}>
-      <Box className='pageHeading'>
-        <Box className='flex row items-center'>
-          <h1 className='h4'>{t('pool')}</h1>
+      {isMobile ? (
+        <>
+          <Box mt={2} className='pageHeading'>
+            <Typography variant='h6'>{t('pool')}</Typography>
+            {helpURL && (
+              <Box
+                className='helpWrapper'
+                onClick={() => window.open(helpURL, '_blank')}
+              >
+                <small>{t('help')}</small>
+                <HelpIcon />
+              </Box>
+            )}
+          </Box>
           {showVersion && (
-            <Box ml={2}>
+            <Box my={2}>
               <VersionToggle />
             </Box>
           )}
-        </Box>
-
-        {helpURL && (
-          <Box
-            className='helpWrapper'
-            onClick={() => window.open(helpURL, '_blank')}
-          >
-            <small>{t('help')}</small>
-            <HelpIcon />
+        </>
+      ) : (
+        <Box className='pageHeading'>
+          <Box className='flex row items-center'>
+            <Typography variant='h6'>{t('pool')}</Typography>
+            {showVersion && (
+              <Box ml={2}>
+                <VersionToggle />
+              </Box>
+            )}
           </Box>
-        )}
-      </Box>
-      <Box margin='24px auto'>
+        </Box>
+      )}
+      {/* <Box margin='24px auto'>
         <HypeLabAds />
-      </Box>
+      </Box> */}
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={12} md={5}>
+        <Grid
+          style={{
+            backgroundColor: '#1b1e29',
+            borderRadius: '20px',
+            padding: '22px 24px 24px',
+          }}
+          item
+          xs={12}
+          sm={12}
+          md={5}
+        >
           <Box className='wrapper'>
             {version === 'singleToken' ? (
               <SingleTokenSupplyLiquidity />

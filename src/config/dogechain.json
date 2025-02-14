@@ -3,16 +3,22 @@
   "v2": true,
   "rpc": "https://rpc.dogechain.dog",
   "blockExplorer": "https://explorer.dogechain.dog",
+  "bridgeUrl": "https://dive.dogechain.dog/bridge",
   "aprAPINetwork": "DogeChain",
   "networkName": "DogeChain",
   "isMainnet": true,
   "visible": true,
   "chainId": 2000,
-  "nativeCurrencyImage": "/doge.png",
+  "nativeCurrencyImage": "/dogechain/image.png",
   "nativeCurrency": {
     "name": "Wrapped Doge",
     "symbol": "WDOGE",
     "decimals": 18
+  },
+  "bridge": {
+    "bridgeCoverImg": "/bridge/dogchain_cover_img.webp",
+    "supportedChains": ["/bridge/dog_coin.webp"],
+    "isBigCoverImg": true
   },
   "swap": {
     "available": true,

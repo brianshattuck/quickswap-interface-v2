@@ -1,19 +1,22 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Menu, { MenuProps } from '@mui/material/Menu';
+import { MenuProps, styled, Menu } from '@material-ui/core';
 
 export const StyledMenu = styled((props: MenuProps) => (
   <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
     {...props}
+    elevation={0}
+    anchorOrigin={
+      props?.anchorOrigin || {
+        vertical: 'bottom',
+        horizontal: 'right',
+      }
+    }
+    transformOrigin={
+      props?.transformOrigin || {
+        vertical: 'top',
+        horizontal: 'right',
+      }
+    }
   />
 ))(({ theme }) => ({
   '& .MuiPaper-root': {

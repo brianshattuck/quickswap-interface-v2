@@ -4,8 +4,10 @@ import { Box } from '@material-ui/core';
 import { useActiveWeb3React, useV2LiquidityPools } from 'hooks';
 import { useTranslation } from 'react-i18next';
 import { getConfig } from 'config/index';
-import { GlobalConst } from 'constants/index';
+import { GlobalConst, DRAGON_EGGS_SHOW } from 'constants/index';
 import CustomTabSwitch from 'components/v3/CustomTabSwitch';
+import { Eggs } from 'components';
+
 import {
   useGammaPositionsCount,
   useV3Positions,
@@ -95,7 +97,7 @@ export default function MyLiquidityPoolsV3() {
   );
 
   const myPoolsFilter = useMemo(() => {
-    const filters = [];
+    const filters: any[] = [];
     filters.push({
       id: GlobalConst.utils.poolsFilter.quickswap,
       text: (
@@ -227,8 +229,22 @@ export default function MyLiquidityPoolsV3() {
 
   return (
     <Box>
-      <Box className='flex justify-between items-center'>
+      <Box
+        className='flex justify-between items-center'
+        sx={{ position: 'relative', padding: '20px 0' }}
+      >
         <p className='weight-600'>{t('myPools')}</p>
+        <Box
+          sx={{
+            minWidth: '100px',
+            position: 'absolute',
+            right: '0px',
+            top: '-80px',
+          }}
+        >
+          {DRAGON_EGGS_SHOW && <Eggs type={3}></Eggs>}
+        </Box>
+
         {allV2PairsWithLiquidity.length > 0 && isMigrateAvailable && (
           <Box
             className='v3-manage-v2liquidity-button'
